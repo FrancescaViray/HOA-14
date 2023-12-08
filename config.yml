@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Dpkg fixing in Ubuntu Servers
+    shell:
+      dpkg --configure -a
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Update and Update Remote in Ubuntu Servers
+    apt:
+      update_cache: yes
+      upgrade: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: controller_node
+  become: true
+  roles:
+    - glance
+    - keystone
+    - nova
